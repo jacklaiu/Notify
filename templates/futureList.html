@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>FutureList</title>
+    <style>
+        body{
+            padding: 30px;
+        }
+        .word-con {
+            display: block;
+            padding: 20px;
+        }
+        .word-con span.word{
+            color: #5d5da7;
+            font-size: 18px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+<!--<div class="word-con"><span class="word code">MA</span>: <span class="word name">甲醇</span></div>
+<div class="word-con"><span class="word code">MA</span>: <span class="word name">甲醇</span></div>
+<div class="word-con"><span class="word code">MA</span>: <span class="word name">甲醇</span></div>
+<div class="word-con"><span class="word code">MA</span>: <span class="word name">甲醇</span></div>
+<div class="word-con"><span class="word code">MA</span>: <span class="word name">甲醇</span></div>
+<div class="word-con"><span class="word code">MA</span>: <span class="word name">甲醇</span></div>
+<div class="word-con"><span class="word code">MA</span>: <span class="word name">甲醇</span></div>
+<div class="word-con"><span class="word code">MA</span>: <span class="word name">甲醇</span></div>-->
+<script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
+<script>
+    debugger;
+    var str = '{{list}}';
+    arr = str.split('$')
+    var htmls = [];
+    for(var i = 0; i < arr.length; i++) {
+        var item = arr[i];
+        if(!item) continue;
+        var strs = item.split('_');
+        var createtime = strs[0], code = strs[1], name = strs[2], rate = strs[3], speed = strs[4];
+        htmls.push('<div class="word-con"><a href="'+window.location.origin+'/show_future_image/'+code.toLowerCase()+'"><span class="word code">['+createtime+': (Rate: ' + rate + ' Speed: ' + speed + ')]:'+code+'</span>: <span class="word name">'+name+'</span></a></div>');
+    }
+    $('body').append(htmls.join(''));
+</script>
+</body>
+</html>

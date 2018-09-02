@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify, make_response, send_file, send_from_directory, render_template
 import os
+import json
 import Dao
 
 app = Flask(__name__, static_url_path='')
@@ -29,6 +30,19 @@ def image(filename):
             return response
     else:
         pass
+
+@app.route('/futureList', methods=['GET'])
+def futureList():
+    items = Dao.select("select f_speed, f_rate, f_createtime, f_code, f_name from t_future_unusual_action order by f_createtime desc limit 10", ())
+    str = ''
+    for item in items:
+        code = item['f_code']
+        name = item['f_name']
+        createtime = item['f_createtime']
+        speed = item['f_speed']
+        rate = item['f_rate']
+        str = str + "$" + createtime + '_' + code + '_' + name + '_' + rate + '_' + speed
+    return render_template("futureList.html", list=str)
 
 @app.route('/show_future_image/<futurename>', methods=['GET'])
 def show_future_image(futurename):
