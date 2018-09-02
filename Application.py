@@ -1,10 +1,9 @@
-from flask import Flask, request, jsonify, make_response, send_file, send_from_directory
+from flask import Flask, request, jsonify, make_response, send_file, send_from_directory, render_template
 import os
 import Dao
 
 app = Flask(__name__, static_url_path='')
 app.config['JSON_AS_ASCII'] = False
-
 
 @app.route('/data/getFutureUnusualAction', methods=['GET'])
 def getFutureUnusualAction():
@@ -19,7 +18,7 @@ def getFutureUnusualAction():
 
 
 @app.route('/image/<filename>', methods=['GET'])
-def show_future(filename):
+def image(filename):
     if request.method == 'GET':
         if filename is None:
             pass
@@ -31,6 +30,9 @@ def show_future(filename):
     else:
         pass
 
+@app.route('/show_future_image/<futurename>', methods=['GET'])
+def show_future_image(futurename):
+    return render_template("show_future_image.html", futurename=futurename)
 
 @app.route('/notify_html', methods=['GET'])
 def view_notify():
