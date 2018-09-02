@@ -1,8 +1,6 @@
-from flask import Flask, abort, request, jsonify, make_response, send_file, url_for, send_from_directory
+from flask import Flask, request, jsonify, make_response, send_file, send_from_directory
 import os
-import PyBase.Dao as dao
-import PyBase.Log as log
-import PyBase.Util as util
+import Dao
 
 app = Flask(__name__, static_url_path='')
 app.config['JSON_AS_ASCII'] = False
@@ -10,13 +8,13 @@ app.config['JSON_AS_ASCII'] = False
 
 @app.route('/data/getFutureUnusualAction', methods=['GET'])
 def getFutureUnusualAction():
-    count = dao.select("select count(*) co from t_future_unusual_action where f_read = 0", ())[0]['co']
+    count = Dao.select("select count(*) co from t_future_unusual_action where f_read = 0", ())[0]['co']
     if count == 0:
         return ""
-    items = dao.select("select f_code, f_name, f_speed, f_rate, f_read, f_createtime from t_future_unusual_action where f_read = 0", ())
+    items = Dao.select("select f_code, f_name, f_speed, f_rate, f_read, f_createtime from t_future_unusual_action where f_read = 0", ())
     for item in items:
         createtime = item['f_createtime']
-        dao.update("update t_future_unusual_action set f_read=%s where f_read=%s and f_createtime=%s", (1,0, createtime))
+        Dao.update("update t_future_unusual_action set f_read=%s where f_read=%s and f_createtime=%s", (1, 0, createtime))
     return jsonify(items)
 
 
