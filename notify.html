@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>FutureNotify</title>
+    <style>
+    body{padding: 30px}
+    img{width: 80%; height: 80%}
+    </style>
+</head>
+<body>
+<script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
+<script>
+
+var refreshImg = function(futurename) {
+    if(!futurename) return;
+    futurename = futurename.toLowerCase();
+    var $body = $('body');
+    $body.empty();
+    $body.append('<img src="'+window.location.origin+'/image/'+futurename+'w.png"/>');
+    $body.append('<img src="'+window.location.origin+'/image/'+futurename+'d.png"/>');
+    $body.append('<img src="'+window.location.origin+'/image/'+futurename+'30.png"/>');
+}
+var webNotice = function(title, content) {
+    if(window.Notification && Notification.permission !== "denied") {
+        Notification.requestPermission(function(status) {
+            var n = new Notification(title, { body: content });
+        });
+    }
+}
+var poll = function() {
+    setTimeout(function() {
+        $.get('/data/getFutureUnusualAction', {}, function(items) {
+            debugger;
+            if(!items || !items.length) return;
+            for(var i = 0, leni = items.length; i < leni; i++) {
+                var data = items[i];
+                var code = data['f_code'];
+                var name = data['f_name'];
+                var speed = data['f_speed'];
+                var rate = data['f_rate'];
+                var createtime = data['f_createtime'];
+                var title = '('+rate+')' +code + '： ' + name + ' speed： ' + speed;
+                var content = '('+rate+')' + code + '：' + name;
+                webNotice(title, content);
+                refreshImg(code);
+            }
+        });
+        poll();
+    }, 10000)
+}
+poll();
+</script>
+</body>
+</html>
